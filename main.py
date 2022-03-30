@@ -3,6 +3,8 @@ from loading_files_from_wiki import loading_files_from_wiki
 
 
 def analyze(text):
+    """Проводим анализ поискового запроса и формируем термы из запросивших слов для дальнейшего поиска"""
+
     tokens = text.split()
     tokens = get_list_without_stopwords(tokens)
     terms_ = get_terms_list(tokens)
@@ -10,12 +12,16 @@ def analyze(text):
 
 
 def get_sets_list(analyzed_query, index_):
+    """Формируем множества с индексами документов, в которых есть слово из запроса"""
+
     return [set(index_.get(token, '')) for token in analyzed_query]
 
 
 def get_invert_index_dict(terms_dict, files_count):
+    """Формируем словарь с инвертированным индексом"""
+
     doc_ids_dict = {}  # словарь с номерами документов
-    count_in_docs_dict = {}  # словарь с частотой использования слова в документах
+    count_in_docs_dict = {}  # словарь с количеством вхождений слова в документах
     for i in range(1, files_count):
         terms = terms_dict[i]
         for word in terms:
@@ -34,6 +40,7 @@ def get_invert_index_dict(terms_dict, files_count):
     invert_index = {}
     with open('files/invert_indexes.txt', 'w') as f:
         for word in answer_sorted:
+            # записываем в файл слово(word[0]) и количество вхождений(word[1]) в общем в документах
             f.write("%s\t%d\t" % (word[0], word[1]))
             sort_doc_ids = sorted(
                 doc_ids_dict[word[0]])  # сортируем список номеров документа, в которое входит данное слово
@@ -50,6 +57,8 @@ def get_invert_index_dict(terms_dict, files_count):
 
 
 def search(query, index_, documents_dict_, search_type='AND'):
+    """Проводим булев поиск"""
+
     documents = []
     if search_type not in ('AND', 'OR'):
         return []
@@ -65,7 +74,9 @@ def search(query, index_, documents_dict_, search_type='AND'):
     return documents
 
 
-def run_bool_search():
+def run_search():
+    """Запускаем булев поиск"""
+
     files_count, documents_dict = loading_files_from_wiki()
     terms_dict = get_terms_dict()
     invert_index_dict = get_invert_index_dict(terms_dict, files_count)
@@ -76,4 +87,4 @@ def run_bool_search():
             res_file.write(f'{url}\n')
 
 
-run_bool_search()
+run_search()

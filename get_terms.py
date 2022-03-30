@@ -33,6 +33,8 @@ def get_terms_list(text: list[str]) -> list[str]:
 
 
 def get_terms_dict(files_count=193) -> dict:
+    """Формируем словарь со списком термов каждого документа"""
+
     terms = {}
     for i in range(1, files_count + 1):
         with open(f'files/{i}.txt', 'r') as doc:
