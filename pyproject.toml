@@ -10,6 +10,8 @@ wikipedia = "^1.4.0"
 Wikipedia-API = "^0.5.4"
 nltk = "^3.7"
 pymorphy2 = "^0.9.1"
+SQLAlchemy = "^1.4.32"
+psycopg2 = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 
